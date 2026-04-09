@@ -1,0 +1,26 @@
+{
+  "name": "sparrow",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "bundle": "powershell -ExecutionPolicy Bypass -File ./automation/package.ps1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurgenjacobsen/sparrow.git"
+  },
+  "keywords": [],
+  "author": "jurgenjacobsen",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jurgenjacobsen/sparrow/issues"
+  },
+  "homepage": "https://github.com/jurgenjacobsen/sparrow#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.1.40",
+    "typescript": "^6.0.2"
+  }
+}
