@@ -78,12 +78,13 @@ Size: 500x600px
 ## Emoji Picker Expanded
 
 ```
-┌────────────────────────┐
-│ 😀 📅 🔔 ⏰ 🎯           │
-│ 📍 🌟 💡 🎨 🎭           │
-│ 🎪 🎬 🎤 🎧 🎮           │
-│ 🎲 🎰 🃏 🎯 📢           │
-└────────────────────────┘
+┌────────────────────────────────────────────┐
+│ 😀 📅 🔔 ⏰ 🎯 📍 🌟 💡 ✅ 📌              │
+│ 📝 📚 💼 🏃 💧 🍽️ 💊 🧘 📞 💻            │
+│ 📷 🛒 🧹 🏠 🚗 ✈️ 🎵 📖 🧠 🎨             │
+│ 🎭 🎪 🎬 🎤 🎧 🎮 🎲 🎰 🃏 📢             │
+│ ❤️ 🔥 ⚡ 🌙 ☀️ 🌱 🎉 🚀 📦 🔒             │
+└────────────────────────────────────────────┘
 ```
 
 ## Color Palette
@@ -258,16 +259,14 @@ Messages: Wrap to available width
 
 ## Emoji Categories Used
 
-- **Calendar**: 📅
-- **Notification**: 🔔
-- **Time**: ⏰
-- **Target**: 🎯
-- **Location**: 📍
-- **Star**: 🌟
-- **Lightbulb**: 💡
-- **Entertainment**: 🎨🎭🎪🎬🎤🎧🎮🎲🎰
-- **Cards**: 🃏
-- **Announce**: 📢
+- **General**: 😀 ✅ 📌 📝
+- **Planning & Work**: 📅 📚 💼 📞 💻 📦
+- **Time & Focus**: ⏰ 🎯 📍 🌟 💡 🧠
+- **Health & Routine**: 🏃 💧 🍽️ 💊 🧘
+- **Life & Errands**: 📷 🛒 🧹 🏠 🚗 ✈️
+- **Creative & Fun**: 🎨 🎭 🎪 🎬 🎤 🎧 🎮 🎲 🎰 🃏 🎵 📖 🎉
+- **Alerts & Priority**: 📢 🔥 ⚡ 🚀
+- **Mood & Personal**: ❤️ 🌙 ☀️ 🌱 🔒
 
 ---
 

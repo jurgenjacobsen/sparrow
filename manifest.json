@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Sparrow",
   "version": "1.0.0",
-  "description": "A sleek Google Chrome extension for managing reminders",
+  "description": "A sleek Google Chrome extension for managing reminders.",
   "permissions": [
     "alarms",
     "notifications",
