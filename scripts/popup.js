@@ -25,6 +25,7 @@ const EMOJIS = [
     '🃏',
     '📢',
 ];
+const CLICK_SOUND_URL = chrome.runtime.getURL('assets/click.mp3');
 // State
 let reminders = [];
 let settings = DEFAULT_SETTINGS;
@@ -71,6 +72,7 @@ function getIntervalMilliseconds(value, unit) {
 }
 // Event Listeners Setup
 function setupEventListeners() {
+    setupButtonClickSound();
     // Settings
     settingsBtn.addEventListener('click', openSettingsModal);
     document.querySelectorAll('.close-btn').forEach((btn) => {
@@ -105,6 +107,25 @@ function setupEventListeners() {
             pendingDeleteId = null;
         }
     });
+}
+function setupButtonClickSound() {
+    document.addEventListener('click', (event) => {
+        const target = event.target;
+        const button = target?.closest('button');
+        if (!button || button.disabled)
+            return;
+        void playClickSound();
+    }, true);
+}
+async function playClickSound() {
+    try {
+        const clickAudio = new Audio(CLICK_SOUND_URL);
+        clickAudio.preload = 'auto';
+        await clickAudio.play();
+    }
+    catch {
+        // Ignore click sound errors to avoid interrupting UI interactions.
+    }
 }
 // Settings Modal
 function openSettingsModal() {

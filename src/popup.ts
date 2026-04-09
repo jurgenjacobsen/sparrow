@@ -46,6 +46,8 @@ const EMOJIS = [
   '📢',
 ];
 
+const CLICK_SOUND_URL = chrome.runtime.getURL('assets/click.mp3');
+
 // State
 let reminders: Reminder[] = [];
 let settings: Settings = DEFAULT_SETTINGS;
@@ -98,6 +100,8 @@ function getIntervalMilliseconds(value: number, unit: Reminder['unit']): number 
 
 // Event Listeners Setup
 function setupEventListeners() {
+  setupButtonClickSound();
+
   // Settings
   settingsBtn.addEventListener('click', openSettingsModal);
   document.querySelectorAll('.close-btn').forEach((btn) => {
@@ -133,6 +137,31 @@ function setupEventListeners() {
       pendingDeleteId = null;
     }
   });
+}
+
+function setupButtonClickSound() {
+  document.addEventListener(
+    'click',
+    (event) => {
+      const target = event.target as HTMLElement | null;
+      const button = target?.closest('button') as HTMLButtonElement | null;
+
+      if (!button || button.disabled) return;
+
+      void playClickSound();
+    },
+    true
+  );
+}
+
+async function playClickSound() {
+  try {
+    const clickAudio = new Audio(CLICK_SOUND_URL);
+    clickAudio.preload = 'auto';
+    await clickAudio.play();
+  } catch {
+    // Ignore click sound errors to avoid interrupting UI interactions.
+  }
 }
 
 // Settings Modal
