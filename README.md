@@ -1,12 +1,14 @@
-![CI and Quality](/assets/banner.png)
-# Sparrow - Reminder Manager
-A sleek Google Chrome extension for managing reminders.
+![Repository Banner](/assets/banner.png)
 
 [![CI and Quality](https://github.com/jurgenjacobsen/sparrow/actions/workflows/ci-quality.yml/badge.svg)](https://github.com/jurgenjacobsen/sparrow/actions/workflows/ci-quality.yml)
 [![wakatime](https://wakatime.com/badge/user/010adc07-6382-419f-87bc-0b3f507ee495/project/583ab4c3-73e0-4dfa-a9e6-51738bc83e10.svg)](https://wakatime.com/badge/user/010adc07-6382-419f-87bc-0b3f507ee495/project/583ab4c3-73e0-4dfa-a9e6-51738bc83e10)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jurgenjacobsen/sparrow/main)
 ![GitHub top language](https://img.shields.io/github/languages/top/jurgenjacobsen/sparrow)
 ![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/ikihafjofjiggfflljmjacnpobejpgco)
+![Chrome Web Store Size](https://img.shields.io/chrome-web-store/size/ikihafjofjiggfflljmjacnpobejpgco)
+
+# Sparrow - Reminder Manager
+A sleek Google Chrome extension for managing reminders.
 
 ## Features
 
