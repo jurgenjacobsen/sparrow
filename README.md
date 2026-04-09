@@ -1,6 +1,8 @@
 # 🐦 Sparrow - Reminder Manager
 A sleek Google Chrome extension for managing reminders.
 
+[![CI and Quality](https://github.com/jurgenjacobsen/sparrow/actions/workflows/ci-quality.yml/badge.svg)](https://github.com/jurgenjacobsen/sparrow/actions/workflows/ci-quality.yml)
+
 ## Features
 
 ✨ **Reminder Management**
