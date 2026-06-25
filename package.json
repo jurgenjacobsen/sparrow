@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/jurgenjacobsen/sparrow#readme",
   "devDependencies": {
-    "@types/chrome": "^0.1.40",
+    "@types/chrome": "^0.2.0",
     "typescript": "^6.0.2"
   }
 }
