@@ -1,17 +1,7 @@
 "use strict";
-// Helper function to convert time interval to milliseconds
-function getMilliseconds(value, unit) {
-    switch (unit) {
-        case 'minutes':
-            return value * 60 * 1000;
-        case 'hours':
-            return value * 60 * 60 * 1000;
-        case 'days':
-            return value * 24 * 60 * 60 * 1000;
-        case 'weeks':
-            return value * 7 * 24 * 60 * 60 * 1000;
-    }
-}
+// ponytail: simplified time conversion to a single-line map lookup
+const BG_UNIT_MS = { minutes: 60000, hours: 3600000, days: 86400000, weeks: 604800000 };
+const getMilliseconds = (value, unit) => value * BG_UNIT_MS[unit];
 // Initialize
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Sparrow Reminder Manager installed!');
@@ -79,21 +69,14 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     // Reschedule
     await scheduleReminders();
 });
+// ponytail: await notifications.create directly, as MV3 APIs natively return promises
 async function showNotification(reminder, alarmName) {
-    const notificationId = `sparrow-${alarmName}`;
-    return new Promise((resolve) => {
-        chrome.notifications.create(notificationId, {
-            type: 'basic',
-            iconUrl: chrome.runtime.getURL('assets/icon.png'),
-            title: `${reminder.icon} - ${reminder.name}`,
-            message: `It's time for your reminder!`,
-            priority: 2,
-        }, () => {
-            if (chrome.runtime.lastError) {
-                console.error('Failed to create notification:', chrome.runtime.lastError.message);
-            }
-            resolve();
-        });
+    await chrome.notifications.create(`sparrow-${alarmName}`, {
+        type: 'basic',
+        iconUrl: chrome.runtime.getURL('assets/icon.png'),
+        title: `${reminder.icon} - ${reminder.name}`,
+        message: `It's time for your reminder!`,
+        priority: 2,
     });
 }
 // Play notification sound
@@ -124,13 +107,5 @@ chrome.notifications.onClicked.addListener((notificationId) => {
         chrome.action.openPopup();
     }
 });
-// Message listener
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'GET_REMINDERS') {
-        chrome.storage.local.get(['reminders'], (data) => {
-            sendResponse(data.reminders || []);
-        });
-        return true;
-    }
-});
+// ponytail: removed dead GET_REMINDERS message listener
 console.log('Sparrow background service worker loaded');

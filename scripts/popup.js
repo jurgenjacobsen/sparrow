@@ -56,7 +56,6 @@ const EMOJIS = [
     '📦',
     '🔒',
 ];
-const CLICK_SOUND_URL = chrome.runtime.getURL('assets/click.mp3');
 // State
 let reminders = [];
 let settings = DEFAULT_SETTINGS;
@@ -67,8 +66,13 @@ let editingReminderId = null;
 const remindersContainer = document.getElementById('reminders-container');
 const emptyState = document.getElementById('empty-state');
 const settingsBtn = document.getElementById('settingsBtn');
+// ponytail: using native HTMLDialogElement types for dialog operations
 const settingsModal = document.getElementById('settingsModal');
 const deleteModal = document.getElementById('deleteModal');
+// ponytail: play click sound for critical action buttons
+const playClickSound = () => {
+    void new Audio(chrome.runtime.getURL('assets/click.mp3')).play().catch(() => { });
+};
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
@@ -89,79 +93,63 @@ async function saveData() {
         settings,
     });
 }
-function getIntervalMilliseconds(value, unit) {
-    switch (unit) {
-        case 'minutes':
-            return value * 60 * 1000;
-        case 'hours':
-            return value * 60 * 60 * 1000;
-        case 'days':
-            return value * 24 * 60 * 60 * 1000;
-        case 'weeks':
-            return value * 7 * 24 * 60 * 60 * 1000;
-    }
-}
+// ponytail: simplified time conversion to a single-line map lookup
+const POPUP_UNIT_MS = { minutes: 60000, hours: 3600000, days: 86400000, weeks: 604800000 };
+const getIntervalMilliseconds = (value, unit) => value * POPUP_UNIT_MS[unit];
 // Event Listeners Setup
 function setupEventListeners() {
-    setupButtonClickSound();
     // Settings
-    settingsBtn.addEventListener('click', openSettingsModal);
+    settingsBtn.addEventListener('click', () => {
+        playClickSound();
+        openSettingsModal();
+    });
+    // ponytail: use native dialog closing instead of toggle class
     document.querySelectorAll('.close-btn').forEach((btn) => {
         btn.addEventListener('click', (e) => {
-            const modal = e.target.closest('.modal');
-            if (modal)
-                modal.classList.add('hidden');
+            playClickSound();
+            const dialog = e.target.closest('dialog');
+            if (dialog)
+                dialog.close();
         });
     });
     // Settings Modal
-    document.getElementById('saveSettingsBtn')?.addEventListener('click', saveSettings);
+    document.getElementById('saveSettingsBtn')?.addEventListener('click', () => {
+        playClickSound();
+        void saveSettings();
+    });
     // Delete Modal
     document.getElementById('cancelDeleteBtn')?.addEventListener('click', () => {
-        deleteModal.classList.add('hidden');
+        playClickSound();
+        deleteModal.close();
         pendingDeleteId = null;
     });
     document.getElementById('confirmDeleteBtn')?.addEventListener('click', () => {
         if (pendingDeleteId) {
-            deleteReminder(pendingDeleteId);
-            deleteModal.classList.add('hidden');
+            playClickSound();
+            void deleteReminder(pendingDeleteId);
+            deleteModal.close();
             pendingDeleteId = null;
         }
     });
-    // Click outside modals to close
+    // ponytail: handle backdrop click natively for dialog elements
     settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal)
-            settingsModal.classList.add('hidden');
+        if (e.target === settingsModal) {
+            playClickSound();
+            settingsModal.close();
+        }
     });
     deleteModal.addEventListener('click', (e) => {
         if (e.target === deleteModal) {
-            deleteModal.classList.add('hidden');
+            playClickSound();
+            deleteModal.close();
             pendingDeleteId = null;
         }
     });
-}
-function setupButtonClickSound() {
-    document.addEventListener('click', (event) => {
-        const target = event.target;
-        const button = target?.closest('button');
-        if (!button || button.disabled)
-            return;
-        void playClickSound();
-    }, true);
-}
-async function playClickSound() {
-    try {
-        const clickAudio = new Audio(CLICK_SOUND_URL);
-        clickAudio.preload = 'auto';
-        await clickAudio.play();
-    }
-    catch {
-        // Ignore click sound errors to avoid interrupting UI interactions.
-    }
 }
 // Settings Modal
 function openSettingsModal() {
     loadSettingsUI();
-    settingsModal.classList.remove('hidden');
+    settingsModal.showModal();
 }
 function loadSettingsUI() {
     document.getElementById('desktopNotifications').checked =
@@ -173,12 +161,12 @@ async function saveSettings() {
     settings.desktopNotifications = document.getElementById('desktopNotifications').checked;
     settings.notificationSounds = document.getElementById('notificationSounds').checked;
     await saveData();
-    settingsModal.classList.add('hidden');
+    settingsModal.close();
 }
 // Delete Reminder with modal confirmation
 function showDeleteConfirmation(id) {
     pendingDeleteId = id;
-    deleteModal.classList.remove('hidden');
+    deleteModal.showModal();
 }
 async function deleteReminder(id) {
     reminders = reminders.filter((r) => r.id !== id);
@@ -230,14 +218,17 @@ function renderReminders() {
       `;
             item.querySelector('.toggle-btn')?.addEventListener('click', (e) => {
                 e.stopPropagation();
+                playClickSound();
                 toggleReminder(reminder.id);
             });
             item.querySelector('.delete-btn')?.addEventListener('click', (e) => {
                 e.stopPropagation();
+                playClickSound();
                 showDeleteConfirmation(reminder.id);
             });
             item.querySelector('.edit-btn')?.addEventListener('click', (e) => {
                 e.stopPropagation();
+                playClickSound();
                 openEditReminder(reminder.id);
             });
             remindersContainer.appendChild(item);
@@ -254,6 +245,7 @@ function renderAddReminderRow() {
         addReminderTrigger.className = 'add-reminder-trigger';
         addReminderTrigger.textContent = '+ Add new reminder';
         addReminderTrigger.addEventListener('click', () => {
+            playClickSound();
             isAddReminderExpanded = true;
             renderReminders();
         });
@@ -381,10 +373,12 @@ function renderAddReminderRow() {
     addRow.appendChild(emojiPicker);
     // Event Listeners
     emojiButton.addEventListener('click', () => {
+        playClickSound();
         emojiPicker.classList.toggle('hidden');
     });
     emojiGrid.querySelectorAll('.emoji-option').forEach((emoji) => {
         emoji.addEventListener('click', (e) => {
+            playClickSound();
             const selectedEmoji = e.target.textContent || '';
             selectedIcon = selectedEmoji;
             emojiButton.textContent = selectedIcon;
@@ -392,6 +386,7 @@ function renderAddReminderRow() {
         });
     });
     saveBtn.addEventListener('click', async () => {
+        playClickSound();
         const icon = selectedIcon.trim();
         const name = nameInput.value.trim();
         const value = parseInt(valueInput.value, 10);
@@ -453,6 +448,7 @@ function renderAddReminderRow() {
         renderReminders();
     });
     cancelBtn.addEventListener('click', () => {
+        playClickSound();
         editingReminderId = null;
         isAddReminderExpanded = false;
         renderReminders();
